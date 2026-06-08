@@ -6,8 +6,192 @@
   <title>Trunk — Projetos Integradores SENAC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Bloco de arquivo no modal ───────────────────────── */
+    .detail-file-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--bg-secondary, #f8f9fb);
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .file-ext-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .file-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary, #1a202c);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+    .file-size {
+      font-size: 11px;
+      color: var(--text-hint, #94a3b8);
+      margin-top: 2px;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue, #003087);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity .2s;
+    }
+    .btn-download:hover { opacity: .85; }
+
+    /* ── Indicador de arquivo no card ───────────────────── */
+    .file-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #64748b;
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+
+    /* ── Status reprovado ────────────────────────────────── */
+    .status-reprovado {
+      background: #fde8e8;
+      color: #c0392b;
+    }
+
+    /* ── Label de matéria do professor na sidebar ────────── */
+    .prof-course-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,.6);
+      padding: 6px 20px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 4px;
+    }
+
+    /* ── Barra de filtros avançados do professor ─────────── */
+    .prof-filter-bar {
+      background: var(--bg-secondary, #f8f9fb);
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .prof-filter-bar .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 160px;
+    }
+    .prof-filter-bar .filter-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-hint, #94a3b8);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .prof-filter-bar .filter-input {
+      background: #fff;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-primary, #1a202c);
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .prof-filter-bar .filter-input:focus {
+      border-color: var(--blue, #003087);
+    }
+    .prof-filter-actions {
+      display: flex;
+      gap: 8px;
+      align-self: flex-end;
+      flex-shrink: 0;
+    }
+    .btn-filter-apply {
+      background: var(--blue, #003087);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .2s;
+    }
+    .btn-filter-apply:hover { opacity: .85; }
+    .btn-filter-clear {
+      background: transparent;
+      color: var(--text-hint, #94a3b8);
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-filter-clear:hover {
+      color: #e74c3c;
+      border-color: #e74c3c;
+    }
+    .prof-results-count {
+      font-size: 12px;
+      color: var(--text-hint, #94a3b8);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+  </style>
 </head>
 <body>
 
@@ -20,21 +204,14 @@
       <div class="shape shape-3"></div>
     </div>
   </div>
-
   <div class="auth-container">
     <div class="auth-card">
-      <div class="brand" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 32px;">
-        <div class="brand-icon" style="margin-bottom: 16px;">
-          <img src="https://i.postimg.cc/kGbhWfLV/Senac-logo-svg.png" alt="Logo Senac" style="height: 55px; width: auto; display: block;">
-        </div>
-        <div>
-          <h1 class="brand-name" style="margin: 0; font-size: 28px;">Trunk</h1>
-          <p class="brand-tagline" style="margin: 4px 0 0 0;">Projetos Integradores · SENAC</p>
-        </div>
+      <div class="brand-center">
+        <img src="https://i.postimg.cc/8kRBXfB3/Chat-GPT-Image-7-de-jun-de-2026-22-40-18.png"
+             alt="Logo Senac" class="brand-logo-auth">
+        <p class="brand-tagline-auth">Projetos Integradores · SENAC</p>
       </div>
-
       <h2 class="auth-title">Entrar na sua conta</h2>
-
       <div class="form-group">
         <label class="form-label">E-mail</label>
         <div class="input-wrapper">
@@ -43,7 +220,6 @@
         </div>
         <span class="field-error" id="err-login-email"></span>
       </div>
-
       <div class="form-group">
         <label class="form-label">Senha</label>
         <div class="input-wrapper">
@@ -55,19 +231,13 @@
         </div>
         <span class="field-error" id="err-login-password"></span>
       </div>
-
       <a href="#" class="forgot-link">Esqueceu a senha?</a>
-
       <button class="btn-primary" onclick="handleLogin()">
         <span class="btn-text">Entrar</span>
         <div class="btn-loader hidden"></div>
       </button>
-
       <div class="auth-divider"><span>ou</span></div>
-
-      <p class="auth-switch">
-        Não tem conta? <a href="#" onclick="showPage('page-register')">Criar conta</a>
-      </p>
+      <p class="auth-switch">Não tem conta? <a href="#" onclick="showPage('page-register')">Criar conta</a></p>
     </div>
   </div>
 </div>
@@ -81,24 +251,17 @@
       <div class="shape shape-3"></div>
     </div>
   </div>
-
   <div class="auth-container">
     <div class="auth-card">
-      <div class="brand">
-        <div class="brand-icon">
-          <img src="https://i.postimg.cc/kGbhWfLV/Senac-logo-svg.png" alt="Logo Trunk" style="height: 28px; width: auto; display: block;">
-        </div>
-        <div>
-          <h1 class="brand-name">Trunk</h1>
-          <p class="brand-tagline">Projetos Integradores · SENAC</p>
-        </div>
+      <div class="brand-center">
+        <img src="https://i.postimg.cc/8kRBXfB3/Chat-GPT-Image-7-de-jun-de-2026-22-40-18.png" alt="Logo Senac" class="brand-logo-auth">
+        <h1 class="brand-name-auth">Trunk</h1>
+        <p class="brand-tagline-auth">Projetos Integradores · SENAC</p>
       </div>
-
       <h2 class="auth-title">Criar nova conta</h2>
-
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Nome</label>
+          <label class="form-label">Nome *</label>
           <div class="input-wrapper">
             <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <input id="reg-name" type="text" class="form-input" placeholder="Seu nome" />
@@ -113,18 +276,16 @@
           </div>
         </div>
       </div>
-
       <div class="form-group">
-        <label class="form-label">E-mail institucional</label>
+        <label class="form-label">E-mail institucional *</label>
         <div class="input-wrapper">
           <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           <input id="reg-email" type="email" class="form-input" placeholder="seu@email.senac.br" />
         </div>
         <span class="field-error" id="err-reg-email"></span>
       </div>
-
       <div class="form-group">
-        <label class="form-label">Curso</label>
+        <label class="form-label">Curso *</label>
         <div class="input-wrapper select-wrapper">
           <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
           <select id="reg-course" class="form-input form-select">
@@ -135,12 +296,12 @@
             <option>Contabilidade</option>
             <option>Logística</option>
             <option>Marketing</option>
+            <option>Gastronomia</option>
             <option>Outro</option>
           </select>
         </div>
         <span class="field-error" id="err-reg-course"></span>
       </div>
-
       <div class="form-group">
         <label class="form-label">Perfil</label>
         <div class="role-selector">
@@ -160,12 +321,11 @@
           </label>
         </div>
       </div>
-
       <div class="form-group">
-        <label class="form-label">Senha</label>
+        <label class="form-label">Senha *</label>
         <div class="input-wrapper">
           <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input id="reg-password" type="password" class="form-input" placeholder="Mín. 8 caracteres" />
+          <input id="reg-password" type="password" class="form-input" placeholder="Mín. 8 caracteres" oninput="checkPasswordStrength(this.value)" />
           <button class="toggle-pw" onclick="togglePassword('reg-password', this)" tabindex="-1">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
@@ -176,92 +336,59 @@
         </div>
         <span class="field-error" id="err-reg-password"></span>
       </div>
-
       <button class="btn-primary" onclick="handleRegister()">
         <span class="btn-text">Criar conta</span>
         <div class="btn-loader hidden"></div>
       </button>
-
-      <p class="auth-switch">
-        Já tem conta? <a href="#" onclick="showPage('page-login')">Entrar</a>
-      </p>
+      <p class="auth-switch">Já tem conta? <a href="#" onclick="showPage('page-login')">Entrar</a></p>
     </div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
+<!-- ===== DASHBOARD ALUNO ===== -->
 <div id="page-dashboard" class="page">
-
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon small">
-        <img src="https://i.postimg.cc/L60nJv2b/logo-white.png" alt="Logo Trunk" style="height: 28px; width: auto; display: block;">
-          <rect width="36" height="36" rx="8" fill="#1a73e8"/>
-          <path d="M9 10h18M9 18h12M9 26h15" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="27" cy="26" r="5" fill="#34a853" stroke="white" stroke-width="1.5"/>
-          <path d="M24.5 26l1.5 1.5 2.5-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
+      <img src="" alt="Logo" class="sidebar-brand-logo" onerror="this.style.display='none'">
       <span class="sidebar-brand-name">Trunk</span>
     </div>
-
-   </nav>
-
-    <div style="padding: 0 16px; margin-top: 16px;">
-      <a href="#" class="nav-item danger" onclick="handleLogout()" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #ff4d4d; text-decoration: none; font-weight: 500; border-radius: 8px; transition: background 0.2s;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Sair da Conta</span>
-      </a>
-    </div>
-
-    <div class="sidebar-footer">
-      <a href="#" class="nav-item active" data-section="home" onclick="switchSection(this, 'sec-home')">
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="home" onclick="switchSection(this,'sec-home')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>Início</span>
       </a>
-      <a href="#" class="nav-item" data-section="projects" onclick="switchSection(this, 'sec-projects')">
+      <a href="#" class="nav-item" data-section="projects" onclick="switchSection(this,'sec-projects')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span>Projetos</span>
       </a>
-      <a href="#" class="nav-item" data-section="upload" onclick="switchSection(this, 'sec-upload')">
+      <a href="#" class="nav-item" data-section="upload" onclick="switchSection(this,'sec-upload')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         <span>Enviar PI</span>
       </a>
-      <a href="#" class="nav-item" data-section="search" onclick="switchSection(this, 'sec-search')">
+      <a href="#" class="nav-item" data-section="search" onclick="switchSection(this,'sec-search')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Buscar</span>
       </a>
+      <a href="#" class="nav-item" data-section="profile" onclick="switchSection(this,'sec-profile')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Meu Perfil</span>
+      </a>
     </nav>
-
     <div class="sidebar-footer">
-      <div class="user-chip" onclick="toggleUserMenu()">
+      <div class="user-chip" onclick="switchSection(document.querySelector('[data-section=profile]'),'sec-profile')">
         <div class="user-avatar" id="user-avatar-sidebar">A</div>
         <div class="user-info">
           <span class="user-name-sidebar" id="user-name-sidebar">Aluno</span>
           <span class="user-role-sidebar" id="user-role-sidebar">Aluno</span>
         </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="user-menu hidden" id="user-menu">
-        <a href="#" class="user-menu-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Meu Perfil
-        </a>
-        <a href="#" class="user-menu-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M20.485 9H22M2 9h1.515M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>
-          Configurações
-        </a>
-        <div class="menu-divider"></div>
-        <a href="#" class="user-menu-item danger" onclick="handleLogout()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Sair
-        </a>
-      </div>
+      <a href="#" class="nav-item danger" onclick="handleLogout()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sair da Conta</span>
+      </a>
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main-wrap">
     <header class="topbar">
       <button class="sidebar-toggle" onclick="toggleSidebar()">
@@ -272,99 +399,62 @@
         <input type="text" placeholder="Buscar projetos..." class="topbar-search-input" oninput="quickSearch(this.value)" />
       </div>
       <div class="topbar-actions">
-        <button class="btn-icon-top" title="Notificações">
+        <button class="btn-icon-top" title="Notificações" onclick="showToast('Sem novas notificações', 'info')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="notif-dot"></span>
         </button>
-        <div class="user-avatar topbar-avatar" id="user-avatar-top" onclick="toggleUserMenu()">A</div>
+        <div class="user-avatar topbar-avatar" id="user-avatar-top" onclick="switchSection(document.querySelector('[data-section=profile]'),'sec-profile')" title="Ver perfil">A</div>
       </div>
     </header>
 
     <main class="main-content">
-
-      <!-- HOME SECTION -->
+      <!-- HOME -->
       <section id="sec-home" class="section active">
         <div class="section-header">
           <div>
             <h2 class="section-title">Bem-vindo, <span id="welcome-name">Aluno</span> 👋</h2>
             <p class="section-subtitle">Gerencie e explore os Projetos Integradores do SENAC</p>
           </div>
-          <button class="btn-primary small" onclick="switchSection(document.querySelector('[data-section=upload]'), 'sec-upload')">
+          <button class="btn-primary small" onclick="switchSection(document.querySelector('[data-section=upload]'),'sec-upload')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Novo PI
           </button>
         </div>
-
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
-            <div class="stat-body">
-              <span class="stat-value" id="stat-total">12</span>
-              <span class="stat-label">Projetos Cadastrados</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <div class="stat-body">
-              <span class="stat-value" id="stat-teams">8</span>
-              <span class="stat-label">Equipes Ativas</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-            <div class="stat-body">
-              <span class="stat-value" id="stat-courses">4</span>
-              <span class="stat-label">Cursos</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-            <div class="stat-body">
-              <span class="stat-value" id="stat-files">47</span>
-              <span class="stat-label">Arquivos Enviados</span>
-            </div>
-          </div>
+          <div class="stat-card"><div class="stat-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="stat-body"><span class="stat-value" id="stat-total">0</span><span class="stat-label">Projetos Cadastrados</span></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-body"><span class="stat-value" id="stat-teams">0</span><span class="stat-label">Equipes Ativas</span></div></div>
+          <div class="stat-card"><div class="stat-icon yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><div class="stat-body"><span class="stat-value" id="stat-courses">0</span><span class="stat-label">Cursos</span></div></div>
+          <div class="stat-card"><div class="stat-icon red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="stat-body"><span class="stat-value" id="stat-files">0</span><span class="stat-label">Arquivos Enviados</span></div></div>
         </div>
-
         <div class="content-columns">
           <div class="col-main">
             <div class="card-section">
-              <div class="card-section-header">
-                <h3>Projetos Recentes</h3>
-                <a href="#" onclick="switchSection(document.querySelector('[data-section=projects]'), 'sec-projects')" class="see-all">Ver todos</a>
-              </div>
-              <div id="recent-projects-list" class="project-list"></div>
+              <div class="card-section-header"><h3>Projetos Recentes</h3><a href="#" onclick="switchSection(document.querySelector('[data-section=projects]'),'sec-projects')" class="see-all">Ver todos</a></div>
+              <div id="recent-projects-list" class="project-list"><div class="empty-state-small">Nenhum projeto ainda. <a href="#" onclick="switchSection(document.querySelector('[data-section=upload]'),'sec-upload')">Envie o primeiro!</a></div></div>
             </div>
           </div>
           <div class="col-side">
             <div class="card-section">
               <div class="card-section-header"><h3>Por Curso</h3></div>
-              <div class="course-breakdown" id="course-breakdown"></div>
+              <div class="course-breakdown" id="course-breakdown"><p style="font-size:13px;color:var(--text-hint)">Nenhum projeto cadastrado.</p></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- PROJECTS SECTION -->
+      <!-- PROJECTS -->
       <section id="sec-projects" class="section">
         <div class="section-header">
-          <div>
-            <h2 class="section-title">Todos os Projetos</h2>
-            <p class="section-subtitle">Explore os PIs cadastrados</p>
-          </div>
-          <button class="btn-primary small" onclick="openModal('modal-project')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Novo PI
-          </button>
+          <div><h2 class="section-title">Todos os Projetos</h2><p class="section-subtitle">Explore os PIs cadastrados</p></div>
+          <button class="btn-primary small" onclick="switchSection(document.querySelector('[data-section=upload]'),'sec-upload')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo PI</button>
         </div>
-
         <div class="filter-bar">
           <div class="filter-chips" id="filter-chips">
-            <button class="chip active" onclick="filterProjects(this, 'all')">Todos</button>
-            <button class="chip" onclick="filterProjects(this, 'Desenvolvimento de Sistemas')">Dev. Sistemas</button>
-            <button class="chip" onclick="filterProjects(this, 'Design Gráfico')">Design</button>
-            <button class="chip" onclick="filterProjects(this, 'Administração')">Administração</button>
-            <button class="chip" onclick="filterProjects(this, 'Marketing')">Marketing</button>
+            <button class="chip active" onclick="filterProjects(this,'all')">Todos</button>
+            <button class="chip" onclick="filterProjects(this,'Desenvolvimento de Sistemas')">Dev. Sistemas</button>
+            <button class="chip" onclick="filterProjects(this,'Design Gráfico')">Design</button>
+            <button class="chip" onclick="filterProjects(this,'Administração')">Administração</button>
+            <button class="chip" onclick="filterProjects(this,'Marketing')">Marketing</button>
+            <button class="chip" onclick="filterProjects(this,'Gastronomia')">Gastronomia</button>
           </div>
           <select class="sort-select" onchange="sortProjects(this.value)">
             <option value="date">Mais recentes</option>
@@ -372,34 +462,29 @@
             <option value="course">Por curso</option>
           </select>
         </div>
-
-        <div class="projects-grid" id="projects-grid"></div>
-      </section>
-
-      <!-- UPLOAD SECTION -->
-      <section id="sec-upload" class="section">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Enviar Projeto Integrador</h2>
-            <p class="section-subtitle">Preencha os dados do seu PI</p>
+        <div class="projects-grid" id="projects-grid">
+          <div class="empty-grid-msg" style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-hint)">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 12px;display:block"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <p>Nenhum projeto cadastrado ainda.</p>
           </div>
         </div>
+      </section>
 
+      <!-- UPLOAD -->
+      <section id="sec-upload" class="section">
+        <div class="section-header"><div><h2 class="section-title">Enviar Projeto Integrador</h2><p class="section-subtitle">Preencha os dados do seu PI</p></div></div>
         <div class="upload-layout">
           <div class="upload-form-card">
             <div class="form-group">
               <label class="form-label">Título do Projeto *</label>
-              <div class="input-wrapper">
-                <input id="up-title" type="text" class="form-input" placeholder="Nome do seu projeto integrador" />
-              </div>
+              <div class="input-wrapper"><input id="up-title" type="text" class="form-input" style="padding-left:12px" placeholder="Nome do seu projeto integrador" /></div>
               <span class="field-error" id="err-up-title"></span>
             </div>
-
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Curso *</label>
                 <div class="input-wrapper select-wrapper">
-                  <select id="up-course" class="form-input form-select">
+                  <select id="up-course" class="form-input form-select" style="padding-left:12px">
                     <option value="">Selecione</option>
                     <option>Desenvolvimento de Sistemas</option>
                     <option>Design Gráfico</option>
@@ -407,24 +492,21 @@
                     <option>Contabilidade</option>
                     <option>Logística</option>
                     <option>Marketing</option>
+                    <option>Gastronomia</option>
                   </select>
                 </div>
                 <span class="field-error" id="err-up-course"></span>
               </div>
               <div class="form-group">
                 <label class="form-label">Turma</label>
-                <div class="input-wrapper">
-                  <input id="up-class" type="text" class="form-input" placeholder="Ex: DSM-2024" />
-                </div>
+                <div class="input-wrapper"><input id="up-class" type="text" class="form-input" style="padding-left:12px" placeholder="Ex: DSM-2024" /></div>
               </div>
             </div>
-
             <div class="form-group">
               <label class="form-label">Descrição *</label>
               <textarea id="up-desc" class="form-input form-textarea" placeholder="Descreva os objetivos, tecnologias usadas e resultados do projeto..."></textarea>
               <span class="field-error" id="err-up-desc"></span>
             </div>
-
             <div class="form-group">
               <label class="form-label">Membros da Equipe</label>
               <div class="input-wrapper">
@@ -432,7 +514,6 @@
                 <input id="up-members" type="text" class="form-input" placeholder="Nomes separados por vírgula" />
               </div>
             </div>
-
             <div class="form-group">
               <label class="form-label">Categoria</label>
               <div class="tag-selector" id="tag-selector">
@@ -442,9 +523,10 @@
                 <button class="tag-btn" onclick="toggleTag(this)">Sustentabilidade</button>
                 <button class="tag-btn" onclick="toggleTag(this)">Saúde</button>
                 <button class="tag-btn" onclick="toggleTag(this)">Educação</button>
+                <button class="tag-btn" onclick="toggleTag(this)">Culinária</button>
+                <button class="tag-btn" onclick="toggleTag(this)">Nutrição</button>
               </div>
             </div>
-
             <div class="form-group">
               <label class="form-label">Arquivo do Projeto</label>
               <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
@@ -456,16 +538,14 @@
                 </div>
               </div>
             </div>
-
             <div class="form-actions">
               <button class="btn-secondary" onclick="resetUploadForm()">Limpar</button>
-              <button class="btn-primary" onclick="handleUpload()">
+              <button class="btn-primary" style="width:auto" onclick="handleUpload()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Enviar Projeto
               </button>
             </div>
           </div>
-
           <div class="upload-tips">
             <div class="tip-card">
               <h4>📋 Dicas para um bom PI</h4>
@@ -490,20 +570,13 @@
         </div>
       </section>
 
-      <!-- SEARCH SECTION -->
+      <!-- SEARCH -->
       <section id="sec-search" class="section">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Buscar Projetos</h2>
-            <p class="section-subtitle">Encontre PIs por nome, curso ou categoria</p>
-          </div>
-        </div>
-
+        <div class="section-header"><div><h2 class="section-title">Buscar Projetos</h2><p class="section-subtitle">Encontre PIs por nome, curso ou categoria</p></div></div>
         <div class="search-box-big">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="text" id="big-search" class="search-input-big" placeholder="Pesquisar projetos, cursos, turmas..." oninput="bigSearch(this.value)" />
         </div>
-
         <div id="search-results" class="projects-grid" style="margin-top:24px"></div>
         <div id="search-empty" class="empty-state hidden">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -511,12 +584,228 @@
         </div>
       </section>
 
+      <!-- PROFILE -->
+      <section id="sec-profile" class="section">
+        <div class="section-header"><div><h2 class="section-title">Meu Perfil</h2><p class="section-subtitle">Gerencie suas informações pessoais</p></div></div>
+        <div class="profile-layout">
+          <div class="profile-card-main">
+            <div class="profile-avatar-area">
+              <div class="profile-avatar-big" id="profile-avatar-big">A</div>
+              <div><h3 id="profile-fullname">Nome do Aluno</h3><span class="profile-role-badge" id="profile-role-badge">Aluno</span></div>
+            </div>
+            <div class="profile-info-grid">
+              <div class="profile-info-item"><span class="profile-info-label">E-mail</span><span class="profile-info-value" id="profile-email">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Curso</span><span class="profile-info-value" id="profile-course">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Turma</span><span class="profile-info-value" id="profile-class">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Perfil</span><span class="profile-info-value" id="profile-perfil">—</span></div>
+            </div>
+            <div class="profile-actions">
+              <button class="btn-secondary" onclick="openEditProfile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editar Perfil</button>
+              <button class="btn-danger" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair da Conta</button>
+            </div>
+          </div>
+          <div class="profile-card-projects">
+            <div class="card-section-header"><h3>Meus Projetos</h3></div>
+            <div id="my-projects-list" class="project-list"><div class="empty-state-small">Você ainda não enviou nenhum projeto.</div></div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
 
-<!-- ===== PROJECT DETAIL MODAL ===== -->
-<div class="modal-overlay hidden" id="modal-detail" onclick="closeModalOutside(event, 'modal-detail')">
+<!-- ===== DASHBOARD PROFESSOR ===== -->
+<div id="page-professor" class="page">
+  <aside class="sidebar" id="sidebar-prof">
+    <div class="sidebar-brand">
+      <img src="" alt="Logo" class="sidebar-brand-logo" onerror="this.style.display='none'">
+      <span class="sidebar-brand-name">Trunk</span>
+    </div>
+    <!-- label do curso inserida via JS -->
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="phome" onclick="switchSectionProf(this,'sec-phome')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Painel</span>
+      </a>
+      <a href="#" class="nav-item" data-section="pprojects" onclick="switchSectionProf(this,'sec-pprojects')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Projetos</span>
+      </a>
+      <a href="#" class="nav-item" data-section="pstudents" onclick="switchSectionProf(this,'sec-pstudents')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Alunos</span>
+      </a>
+      <a href="#" class="nav-item" data-section="pfeedback" onclick="switchSectionProf(this,'sec-pfeedback')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Feedbacks</span>
+      </a>
+      <a href="#" class="nav-item" data-section="pprofile" onclick="switchSectionProf(this,'sec-pprofile')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Meu Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip" onclick="switchSectionProf(document.querySelector('#sidebar-prof [data-section=pprofile]'),'sec-pprofile')">
+        <div class="user-avatar" id="prof-avatar-sidebar">P</div>
+        <div class="user-info">
+          <span class="user-name-sidebar" id="prof-name-sidebar">Professor</span>
+          <span class="user-role-sidebar">Professor</span>
+        </div>
+      </div>
+      <a href="#" class="nav-item danger" onclick="handleLogout()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sair da Conta</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="sidebar-toggle" onclick="toggleSidebarProf()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar projetos..." class="topbar-search-input" oninput="quickSearchProf(this.value)" />
+      </div>
+      <div class="topbar-actions">
+        <div class="prof-badge-topbar">Professor</div>
+        <div class="user-avatar topbar-avatar" id="prof-avatar-top" onclick="switchSectionProf(document.querySelector('#sidebar-prof [data-section=pprofile]'),'sec-pprofile')" title="Ver perfil">P</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- PROF HOME -->
+      <section id="sec-phome" class="section active">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Painel do Professor — <span id="prof-welcome-name">Professor</span> 🎓</h2>
+            <p class="section-subtitle">Visualize e avalie os Projetos Integradores de todos os cursos</p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="stat-body"><span class="stat-value" id="pstat-total">0</span><span class="stat-label">Total de Projetos</span></div></div>
+          <div class="stat-card"><div class="stat-icon yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-body"><span class="stat-value" id="pstat-pending">0</span><span class="stat-label">Aguardando Avaliação</span></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stat-body"><span class="stat-value" id="pstat-approved">0</span><span class="stat-label">Aprovados</span></div></div>
+          <div class="stat-card"><div class="stat-icon red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-body"><span class="stat-value" id="pstat-students">0</span><span class="stat-label">Alunos na Matéria</span></div></div>
+        </div>
+        <div class="content-columns">
+          <div class="col-main">
+            <div class="card-section">
+              <div class="card-section-header"><h3>Projetos Recentes para Avaliar</h3><a href="#" onclick="switchSectionProf(document.querySelector('[data-section=pprojects]'),'sec-pprojects')" class="see-all">Ver todos</a></div>
+              <div id="prof-recent-list" class="project-list"><div class="empty-state-small">Nenhum projeto enviado ainda.</div></div>
+            </div>
+          </div>
+          <div class="col-side">
+            <div class="card-section">
+              <div class="card-section-header"><h3>Status dos Projetos</h3></div>
+              <div id="prof-status-breakdown" class="course-breakdown"><p style="font-size:13px;color:var(--text-hint)">Nenhum projeto cadastrado.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROF PROJECTS -->
+      <section id="sec-pprojects" class="section">
+        <div class="section-header"><div><h2 class="section-title">Gerenciar Projetos</h2><p class="section-subtitle">Filtre por turma, ano ou nome e avalie os PIs de todos os alunos</p></div></div>
+
+        <!-- ── BARRA DE FILTROS AVANÇADOS ───────────────────── -->
+        <div class="prof-filter-bar">
+          <div class="filter-group">
+            <label>🔍 Buscar por nome / membro</label>
+            <input id="prof-search-nome" type="text" class="filter-input" placeholder="Ex: App de vendas, João Silva..." oninput="applyProfFilters()" />
+          </div>
+          <div class="filter-group">
+            <label>🏫 Turma</label>
+            <select id="prof-filter-turma" class="filter-input" onchange="applyProfFilters()">
+              <option value="">Todas as turmas</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>📅 Ano</label>
+            <select id="prof-filter-ano" class="filter-input" onchange="applyProfFilters()">
+              <option value="">Todos os anos</option>
+            </select>
+          </div>
+          <div class="prof-filter-actions">
+            <button class="btn-filter-clear" onclick="clearProfFilters()">Limpar</button>
+          </div>
+        </div>
+        <!-- ─────────────────────────────────────────────────── -->
+
+        <div class="filter-bar">
+          <div class="filter-chips">
+            <button class="chip active" data-filter="all" onclick="filterProfProjects(this,'all')">Todos</button>
+            <button class="chip" data-filter="pendente" onclick="filterProfProjects(this,'pendente')">Pendentes</button>
+            <button class="chip" data-filter="aprovado" onclick="filterProfProjects(this,'aprovado')">Aprovados</button>
+            <button class="chip" data-filter="revisao" onclick="filterProfProjects(this,'revisao')">Em Revisão</button>
+            <button class="chip" data-filter="reprovado" onclick="filterProfProjects(this,'reprovado')">Reprovados</button>
+          </div>
+          <select class="sort-select" onchange="sortProfProjects(this.value)">
+            <option value="date">Mais recentes</option>
+            <option value="name">A–Z</option>
+            <option value="status">Por status</option>
+            <option value="course">Por curso</option>
+          </select>
+        </div>
+
+        <p class="prof-results-count" id="prof-results-count"></p>
+
+        <div class="projects-grid" id="prof-projects-grid">
+          <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-hint)"><p>Nenhum projeto para avaliar.</p></div>
+        </div>
+      </section>
+
+      <!-- PROF STUDENTS -->
+      <section id="sec-pstudents" class="section">
+        <div class="section-header"><div><h2 class="section-title">Alunos Cadastrados</h2><p class="section-subtitle">Alunos do mesmo curso que você</p></div></div>
+        <div class="students-table-wrap">
+          <table class="students-table">
+            <thead><tr><th>Nome</th><th>E-mail</th><th>Curso</th><th>Turma</th><th>Projetos</th></tr></thead>
+            <tbody id="students-tbody"><tr><td colspan="5" style="text-align:center;color:var(--text-hint);padding:40px">Nenhum aluno cadastrado.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PROF FEEDBACK -->
+      <section id="sec-pfeedback" class="section">
+        <div class="section-header"><div><h2 class="section-title">Feedbacks Enviados</h2><p class="section-subtitle">Histórico de avaliações realizadas</p></div></div>
+        <div id="feedback-list" class="feedback-list">
+          <div class="empty-state"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Nenhum feedback enviado ainda.</p></div>
+        </div>
+      </section>
+
+      <!-- PROF PROFILE -->
+      <section id="sec-pprofile" class="section">
+        <div class="section-header"><div><h2 class="section-title">Meu Perfil</h2><p class="section-subtitle">Suas informações como professor</p></div></div>
+        <div class="profile-layout">
+          <div class="profile-card-main">
+            <div class="profile-avatar-area">
+              <div class="profile-avatar-big prof-avatar-color" id="pprofile-avatar-big">P</div>
+              <div><h3 id="pprofile-fullname">Nome do Professor</h3><span class="profile-role-badge prof-badge">Professor</span></div>
+            </div>
+            <div class="profile-info-grid">
+              <div class="profile-info-item"><span class="profile-info-label">E-mail</span><span class="profile-info-value" id="pprofile-email">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Curso</span><span class="profile-info-value" id="pprofile-course">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Turma</span><span class="profile-info-value" id="pprofile-class">—</span></div>
+              <div class="profile-info-item"><span class="profile-info-label">Projetos Avaliados</span><span class="profile-info-value" id="pprofile-evaluated">0</span></div>
+            </div>
+            <div class="profile-actions">
+              <button class="btn-danger" onclick="handleLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair da Conta</button>
+            </div>
+          </div>
+          <div class="profile-card-projects">
+            <div class="card-section-header"><h3>Últimos Feedbacks</h3></div>
+            <div id="prof-feedbacks-profile" class="project-list"><div class="empty-state-small">Nenhum feedback enviado ainda.</div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ===== MODAL DETALHE PROJETO ===== -->
+<div class="modal-overlay hidden" id="modal-detail" onclick="closeModalOutside(event,'modal-detail')">
   <div class="modal modal-large">
     <div class="modal-header">
       <div>
@@ -529,45 +818,89 @@
     </div>
     <div class="modal-body">
       <div class="detail-meta">
-        <span id="detail-team"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Equipe</span>
-        <span id="detail-date"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Data</span>
+        <span id="detail-team"></span>
+        <span id="detail-date"></span>
+        <span id="detail-status-badge"></span>
       </div>
       <p id="detail-desc" class="detail-desc"></p>
       <div id="detail-tags" class="detail-tags"></div>
+      <!-- bloco do arquivo inserido aqui via JS -->
+
+      <!-- Área de feedback do professor -->
+      <div id="prof-feedback-area" class="hidden" style="margin-top:20px;border-top:1px solid var(--border);padding-top:20px">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-primary)">Avaliação do Professor</h4>
+        <div id="existing-feedback-display" class="hidden"></div>
+        <div id="feedback-form-area">
+          <div class="form-group">
+            <label class="form-label">Nota (0–10)</label>
+            <div class="input-wrapper"><input id="feedback-grade" type="number" min="0" max="10" step="0.1" class="form-input" style="padding-left:12px" placeholder="Ex: 8.5" /></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <div class="input-wrapper select-wrapper">
+              <select id="feedback-status" class="form-input form-select" style="padding-left:12px">
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="revisao">Em Revisão</option>
+                <option value="reprovado">Reprovado</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Comentário</label>
+            <textarea id="feedback-comment" class="form-input form-textarea" placeholder="Escreva seu feedback para o aluno..."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+            <button class="btn-secondary" onclick="closeModal('modal-detail')" style="width:auto">Cancelar</button>
+            <button class="btn-primary" style="width:auto" onclick="submitFeedback()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Salvar Avaliação
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback visível pelo aluno -->
+      <div id="student-feedback-display" class="hidden" style="margin-top:20px;border-top:1px solid var(--border);padding-top:20px"></div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" id="modal-detail-footer">
       <button class="btn-secondary" onclick="closeModal('modal-detail')">Fechar</button>
-      <button class="btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Baixar Arquivo
-      </button>
     </div>
   </div>
 </div>
 
-<!-- ===== NEW PROJECT MODAL ===== -->
-<div class="modal-overlay hidden" id="modal-project" onclick="closeModalOutside(event, 'modal-project')">
+<!-- ===== MODAL EDITAR PERFIL ===== -->
+<div class="modal-overlay hidden" id="modal-edit-profile" onclick="closeModalOutside(event,'modal-edit-profile')">
   <div class="modal">
     <div class="modal-header">
-      <h3 class="modal-title">Novo Projeto Integrador</h3>
-      <button class="modal-close" onclick="closeModal('modal-project')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h3 class="modal-title">Editar Perfil</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-profile')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <p style="color:var(--text-secondary);font-size:14px">Acesse a seção <strong>Enviar PI</strong> no menu lateral para cadastrar um projeto completo.</p>
+      <div class="form-group"><label class="form-label">Nome</label><div class="input-wrapper"><input id="edit-name" type="text" class="form-input" style="padding-left:12px" placeholder="Seu nome" /></div></div>
+      <div class="form-group"><label class="form-label">Turma</label><div class="input-wrapper"><input id="edit-class" type="text" class="form-input" style="padding-left:12px" placeholder="Ex: DSM-2024" /></div></div>
+      <div class="form-group"><label class="form-label">Curso</label><div class="input-wrapper select-wrapper"><select id="edit-course" class="form-input form-select" style="padding-left:12px">
+        <option value="">Selecione</option>
+        <option>Desenvolvimento de Sistemas</option>
+        <option>Design Gráfico</option>
+        <option>Administração</option>
+        <option>Contabilidade</option>
+        <option>Logística</option>
+        <option>Marketing</option>
+        <option>Gastronomia</option>
+        <option>Outro</option>
+      </select></div></div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('modal-project')">Cancelar</button>
-      <button class="btn-primary" onclick="closeModal('modal-project'); switchSection(document.querySelector('[data-section=upload]'), 'sec-upload')">Ir para envio</button>
+      <button class="btn-secondary" onclick="closeModal('modal-edit-profile')">Cancelar</button>
+      <button class="btn-primary" style="width:auto" onclick="saveProfile()">Salvar</button>
     </div>
   </div>
 </div>
 
-<!-- ===== TOAST ===== -->
+<!-- TOAST -->
 <div class="toast-container" id="toast-container"></div>
 
-<script src="js/data.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
